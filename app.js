@@ -1,5 +1,5 @@
 const express = require('express');
-const data = require('./tasks');
+const dbConnect = require('./mongo');
 
 const app = express();
 
@@ -43,11 +43,15 @@ app.post('/tasks', (req, res) => {
 app.delete('/tasks/:id', (req, res) =>{
     const givenId = req.params.id;
 
-    console.log(data.tasks)
+    const searchedTask = data.tasks.find(element => element.id == givenId);
+
+    if(!searchedTask){
+        res.status(404);
+        res.json({error: 'Task can not be deleted, because does not exist'});
+        return;
+    }
 
     newArray = data.tasks.splice(givenId - 1, 1);
-
-    console.log(data.tasks)
 
     res.status(204);
     res.send();
@@ -59,6 +63,12 @@ app.put('/tasks/:id', (req, res) => {
     const givenTitle = req.body.title;
 
     const existingTask = data.tasks.find(element => element.id == givenId); 
+
+    if(!existingTask){
+        res.status(404);
+        res.json({error: 'Task can not be updated, because does not exist'});
+        return;
+    }
     
     existingTask.status = givenStatus;
     existingTask.title = givenTitle;
