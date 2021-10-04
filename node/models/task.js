@@ -8,6 +8,10 @@ const taskSchema = new mongoose.Schema({
     title: {
         type: String,
         require: true
+    },
+    status2: {
+        type: String,
+        require: true,
     }
 })
 

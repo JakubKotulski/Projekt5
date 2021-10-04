@@ -34,10 +34,12 @@ app.get('/tasks/:id', (req, res) =>{
 // 3
 app.post('/tasks', (req, res) => {
     const title = req.body.title;
+    const status2 = req.body.status2;
 
     const objectToInsert = new Task({
         status: 'Pending',
-        title: title
+        title: title,
+        status2: status2
     })
 
     objectToInsert.save().then(() => {
@@ -69,8 +71,9 @@ app.put('/tasks/:id', (req, res) => {
     const givenId = req.params.id
     const givenStatus = req.body.status;
     const givenTitle = req.body.title;
+    const givenStatus2 = req.body.status2;
 
-    Task.updateOne({_id: givenId}, {status: givenStatus, title: givenTitle}).orFail().then((data) => {
+    Task.updateOne({_id: givenId}, {status: givenStatus, title: givenTitle, status2: givenStatus2}).orFail().then((data) => {
         if(!data){
             res.status(404);
             res.json({error: 'Task can not be updated, because does not exist'});
@@ -78,7 +81,7 @@ app.put('/tasks/:id', (req, res) => {
         }
         res.status(200);
 
-        res.json({_id: givenId, status: givenStatus, title: givenTitle});
+        res.json({_id: givenId, status: givenStatus, title: givenTitle, status2: givenStatus2});
     }).catch(error => {
         console.error(error);
         res.status(404);
